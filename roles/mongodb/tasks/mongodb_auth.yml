@@ -6,7 +6,7 @@
     state: present
 
 - name: See if mongodb authorization is enabled and users are configured
-  command: 'mongo --eval "db.getUsers()" {{ mongodb_admin_db }}'
+  command: 'mongo --eval "db.getUsers()" admin'
   # this will fail (rc 252) if auth is enabled and users are configured
   # With the localhost exception, this will succeed (rc 0) when users are not configured even if auth is enabled.
   # see:
@@ -36,14 +36,14 @@
 
     name: "{{ mongodb_admin_username }}"
     password: "{{ mongodb_admin_password }}"
-    database: "{{ mongodb_admin_db }}"
+    database: admin
     roles: userAdminAnyDatabase
 
     login_host: "{{ mongodb_host }}"
     login_port: "{{ mongodb_port }}"
     login_user: "{{ (_mongo_authorization.rc == 0) | ternary(omit, mongodb_admin_username) }}"
     login_password: "{{ (_mongo_authorization.rc == 0) | ternary(omit, mongodb_admin_password) }}"
-    login_database: "{{ (_mongo_authorization.rc == 0) | ternary(omit, mongodb_admin_db) }}"
+    login_database: "{{ (_mongo_authorization.rc == 0) | ternary(omit, 'admin') }}"
 
 - name: Enable security section in mongod.conf
   become: yes
@@ -116,7 +116,7 @@
     login_port: "{{ mongodb_port }}"
     login_user: "{{ mongodb_admin_username }}"
     login_password: "{{ mongodb_admin_password }}"
-    login_database: "{{ mongodb_admin_db }}"
+    login_database: admin
   loop_control:
     label: "{{ item.username }} on {{ item.db }}"
   with_items: "{{ mongodb_users }}"
