@@ -1,22 +1,9 @@
 ---
-- name: Check for pip (used to install pymongo)
-  command: "{{ pip | default('pip') }} --version"
-  register: pip_check
-  changed_when: no
-  failed_when: no
-
-# It shouldn't matter if it's an old version of pip for installing pymongo, so use the system package instead of get-pip.py
-- name: Install pip with system package (used to install pymongo)
-  when: pip_check.rc != 0
-  become: yes
-  package:
-    name: 'python{% if ansible_os_family == "RedHat" and ansible_distribution_major_version == "7" %}2{% endif %}-pip'
-    state: present
-
 - name: Ensure pymongo is installed for the mongodb_user ansible module
   become: yes
-  pip:
-    name: pymongo
+  package:
+    name: python-pymongo
+    state: present
 
 - name: See if mongodb authorization is enabled and users are configured
   command: 'mongo --eval "db.getUsers()" {{ mongodb_admin_db }}'
