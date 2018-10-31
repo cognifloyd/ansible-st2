@@ -1,4 +1,4 @@
----
+loop---
 # Update proxy env vars in StackStorm service config files
 - name: proxy | Configure StackStorm services
   become: yes
@@ -9,7 +9,7 @@
     line: "{{ item.1}}={{ ansible_env.get(item.1) }}"
     # NB: Empty ENV var cast to 'None' string in Ansible
     state: "{{ 'present' if ansible_env.get(item.1, 'None') != 'None' else 'absent' }}"
-  with_nested:
+  loop:
     - [st2api, st2actionrunner]
     - [http_proxy, https_proxy, no_proxy]
   notify:

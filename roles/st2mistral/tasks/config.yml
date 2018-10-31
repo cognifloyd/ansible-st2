@@ -6,7 +6,7 @@
     section: "{{ _conf_section_name }}"
     option: "{{ _conf_option.key }}"
     value: "{{ _conf_option.value }}"
-  with_dict: "{{ _conf_options }}"
+  loop: "{{ _conf_options }}"
   loop_control:
     loop_var: _conf_option
   # prevent logging passwords, auth URIs, and secrets
