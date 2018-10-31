@@ -1,4 +1,4 @@
-loop---
+---
 # Update proxy env vars in StackStorm service config files
 - name: proxy | Configure StackStorm services
   become: yes

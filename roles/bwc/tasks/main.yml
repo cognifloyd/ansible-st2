@@ -1,4 +1,4 @@
-import_tasks---
+---
 - name: Assert that 'bwc_license' is specified correctly
   fail:
     msg: "License key must be supplied for BWC enterprise installation."
