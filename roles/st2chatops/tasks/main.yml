@@ -113,7 +113,7 @@
     dest: /opt/stackstorm/chatops/st2chatops.env
     regexp: '{{ item }}'
     replace: '# \1'
-  with_items:
+  loop:
     - '^(export ST2_AUTH_URL.*)'
     - '^(export ST2_AUTH_USERNAME.*)'
     - '^(export ST2_AUTH_PASSWORD.*)'
@@ -173,7 +173,7 @@
     option: 'export {{ _conf_option.key }}'
     value: '{{ _conf_option.value }}'
     no_extra_spaces: yes
-  with_dict: '{{ st2chatops_config }}'
+  loop: '{{ st2chatops_config }}'
   loop_control:
     loop_var: _conf_option
   no_log: true
