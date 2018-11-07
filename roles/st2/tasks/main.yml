@@ -74,7 +74,10 @@
 
 - name: Configure StackStorm st2.conf settings
   # Ansible nested loop to iterate through a hash of hashes
-  import_tasks: config.yml _conf_section_name={{ _conf_section.key }} _conf_options={{ _conf_section.value }}
+  include_tasks: config.yml
+  vars:
+    _conf_section_name: "{{ _conf_section.key }}"
+    _conf_options: "{{ _conf_section.value }}"
   loop: "{{ st2_config }}"
   loop_control:
     loop_var: _conf_section
